@@ -1,0 +1,187 @@
+<!--
+Copyright (c) 2014 VCA Technology. All rights reserved.
+Use of this source code is governed by a BSD-style
+license that can be found in the LICENSE file.
+-->
+
+<!--
+We use the Polymer framework to provide the 'sugar' on top of the web components standard APIs
+
+  * Project homepage: https://www.polymer-project.org/
+  * API guide: https://www.polymer-project.org/docs/polymer/polymer.html
+-->
+<link rel="import" href="../polymer/polymer.html" />
+
+<!--
+This is our data generator component.
+
+TODO:
+
+ * Allow the generated values to be specified by attributes
+ * Change the x value to use high resolutions timestamps to provide a running graph
+ * Allow the generated value to be specified by a generation function string `y = sin(x)`
+ * Stop the generation when the tab is hidden
+ * Improve the styling of the element
+ * Add documentation to the component, attributes and functions
+-->
+<polymer-element name="test-generator" attributes="data generating equation">
+  <!--
+  This template implements the shadow DOM of the component which has special properties
+  such as having scoped CSS styles and other goodies:
+
+    * http://www.html5rocks.com/en/tutorials/webcomponents/shadowdom/
+  -->
+  <template>
+    <style>
+      /* Apply a natural box layout model to all elements */
+      :host, :host *, :host *:before, :host *:after {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+      /* Some styling for this element when it is attached to the DOM.
+       * Any CSS that is good in evergreen browsers is fine: http://caniuse.com
+       */
+      :host {
+        display: block;
+        overflow: auto;
+        background-color: white;
+        padding: .5em;
+      }
+
+      /* Style is scoped to this component only buttons in this component will have padding */
+      button {
+        padding: .5em;
+        display: inline-block;
+        background: #cc0000;
+        border: 1px solid #cc0000;
+        border-radius: 0.3em;
+        color: white;
+        cursor: pointer;
+      }
+
+      /* Button style hover */
+      button:hover {
+        padding: .5em;
+        display: inline-block;
+        background: #a3a3a3;
+        border: 1px solid #a3a3a3;
+        border-radius: 0.3em;
+        color: white;
+      }
+
+       /* Equation input style*/
+      input {
+        padding: .5em;
+        display: inline-block;
+        background: white;
+        border: 1px solid #cc0000;
+        border-radius: 0.3em;
+        
+
+      }
+    </style>
+    <!-- buttons can be implicitly bound to a function defined on the prototype -->
+    <button on-tap="{{start}}" disabled?={{generating}}>Start</button>
+    <button on-tap="{{stop}}" disabled?={{!generating}}>Stop</button>
+    <button on-tap="{{generate}}">Generate</button>
+    <input on-keypress="{{keypressHandler}}" value="{{equation}}"
+           placeholder="Enter the function here...">
+
+  </template>
+  <script>
+    (function(undefined) {
+      'use strict';
+      var polymer = new Polymer({
+        // The default value for the generating attribute
+        generating: false,
+        counter: 0,
+
+        /* Polymer has various 'lifecycle' callbacks for each component. This one is invoked when the
+         * element is created.
+         * https://www.polymer-project.org/docs/polymer/polymer.html#lifecyclemethods
+         */
+        created: function() {
+          /* We have to create Array and Object attributes in the `created` callback to avoid
+           * incorrect 'shared state' between components.
+           * https://www.polymer-project.org/docs/polymer/polymer.html#configuring-an-element-via-attributes
+           */
+          //this.data = {};
+        },
+
+        /* This will be invoked when the element is inserted into the DOM */
+        attached: function() {
+          //this.start();
+        },
+
+        /* This will be invoked when the element is removed from the DOM */
+        detached: function() {
+          // Stop generating data
+          this.stop();
+        },
+
+        // Invoked when the state of the generating changes
+        generatingChanged: function(oldValue, newValue) {
+          if (newValue) {
+            this.timer = window.setInterval(this.equaitonSolver.bind(this), 1000);
+            //this.generate();
+            //this.equaitonSolver();
+          } else {
+            window.clearInterval(this.timer);
+          }
+        },
+
+        // Functions that are defined on the prototype always have `this` set to the component
+        start: function() {
+          this.generating = true;
+        },
+
+        // Stops the timing function
+        stop: function() {
+          this.generating = false;
+        },
+
+        // Invoking this generates the more data, when press generate button
+        generate: function() {
+          this.equaitonSolver();
+        },
+
+        // Invoking this generates the more data, when press Enter in input
+        keypressHandler: function(event, detail, sender) { 
+          if (event.keyCode == 13) {
+              this.equaitonSolver();
+          }
+        },
+
+        // Create data for the graph based in input data box
+        equaitonSolver: function(){
+          // Check buffer data size
+          if(this.counter > 40){
+            this.counter = 0;
+          }
+
+          // Check correct data inside de input area
+          if((this.equation != undefined) && (this.equation.indexOf("x") > -1) && (this.equation.indexOf("=") > -1)){
+            //  Delete y part of equation
+            var auxEquation = this.equation.substr(this.equation.indexOf("=")+1);
+            
+            // Replace all ocurrences of x with counter value
+            while(auxEquation.indexOf("x") != -1){
+              auxEquation = auxEquation.replace("x",this.counter);
+            };
+
+            // Create evaluated data
+            this.data = {
+              x: this.counter,
+              y: eval(auxEquation)
+            };
+
+            // Increment counter
+            this.counter++;
+          }
+
+        }
+      });
+    }());
+  </script>
+</polymer-element>

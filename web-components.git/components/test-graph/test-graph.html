@@ -1,0 +1,121 @@
+<!--
+Copyright (c) 2014 VCA Technology. All rights reserved.
+Use of this source code is governed by a BSD-style
+license that can be found in the LICENSE file.
+-->
+
+<!--
+We use the Polymer framework to provide the 'sugar' on top of the web components standard APIs
+
+  * Project homepage: https://www.polymer-project.org/
+  * API guide: https://www.polymer-project.org/docs/polymer/polymer.html
+-->
+<link rel="import" href="../polymer/polymer.html" />
+
+<!--
+This is graphs the generated data.
+
+TODO:
+
+ * Plot the history on a JavaScript SVG graph
+ * Allow for multiple incoming data streams
+ * Allow for saving of graph as PNG
+ * Improve the styling of the element
+ * Add documentation to the component, attributes and functions
+-->
+<polymer-element name="test-graph" attributes="data">
+  <!--
+  This template implements the shadow DOM of the component which has special properties
+  such as having scoped CSS styles and other goodies:
+
+    * http://www.html5rocks.com/en/tutorials/webcomponents/shadowdom/
+  -->
+  <template>
+    <style>
+      /* Apply a natural box layout model to all elements */
+      :host, :host *, :host *:before, :host *:after {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+
+      /* Some styling for this element when it is attached to the DOM.
+       * Any CSS that is good in evergreen browsers is fine: http://caniuse.com
+       */
+      :host {
+        display: block;
+        overflow: auto;
+        background-color: white;
+        padding: .5em;
+      }
+
+      /* SVG Graph style */
+      svg{
+        border-bottom: 1px solid #a3a3a3;  
+        border-left: 1px solid #a3a3a3;  
+      }
+
+      /* Graphical point style */
+      circle{
+        stroke: #a3a3a3;
+        fill: #cc0000;
+        stroke-width: 0.1;
+      }
+
+      /* Graphical x axis style */
+      line{
+        stroke: #d0d0d0;
+        stroke-width: 0.1;
+      }
+
+    </style>
+    <!--
+    Polymer provides some nice template bindings that we can use to repeat over attributes
+    https://www.polymer-project.org/docs/polymer/binding-types.html#iterative-templates
+    -->
+    <svg width="400px" height="200px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 20">
+      <template repeat="{{history}}">
+        <!-- Coordenates transformation in order to place the x axis in the middle of the graph -->
+        <circle cx="{{x}}" cy="{{y}}" r="0.3" transform="translate(0,10) scale(1,-1)"></circle>
+      </template>
+      <line x1="0" y1="10" x2="40" y2="10"/>
+    </svg>
+  </template>
+  <script>
+    (function(undefined) {
+      'use strict';
+      var polymer = new Polymer({
+        /* Polymer has various 'lifecycle' callbacks for each component. This one is invoked when the
+         * element is created.
+         * https://www.polymer-project.org/docs/polymer/polymer.html#lifecyclemethods
+         */
+        created: function() {
+          /* We have to create Array and Object attributes in the `created` callback to avoid
+           * incorrect 'shared state' between components.
+           * https://www.polymer-project.org/docs/polymer/polymer.html#configuring-an-element-via-attributes
+           */
+          this.history = [];
+          this.data = {};
+        },
+
+        /* This is a nice polymer MVC callback that is invoked any time the
+         * `data` attribute changes. We can use this to store a history of
+         * the changes to the attribute and create a graph
+         */
+        dataChanged: function(oldValue, newValue) {
+          // We only store a certain amount of changes to the array
+          if (this.history.length >= 40) {
+            // Make sure the history has been corrupted to a long length
+            this.history.length = 40;
+
+            // Pop the oldest value off the array
+            this.history.shift();
+          }
+
+          // Add the new data to the history
+          this.history.push(newValue);
+        }
+      });
+    }());
+  </script>
+</polymer-element>

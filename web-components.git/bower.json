@@ -1,0 +1,12 @@
+{
+  "name": "vca-web-components-test",
+  "main": "index.html",
+  "ignore": [
+    "**/.*"
+  ],
+  "dependencies": {
+    "normalize.css": "*",
+    "polymer": "Polymer/polymer",
+    "webcomponentsjs": "Polymer/webcomponentsjs"
+  }
+}

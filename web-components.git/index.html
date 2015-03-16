@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!--[if lte IE 10]>     <html lang='en-GB' class="browser-warning"> <!--<![endif]-->
+<!--[if gt IE 10]><!--> <html lang='en-GB'>                         <!--<![endif]-->
+  <head>
+    <!-- Description for the page -->
+    <meta charset="utf-8" />
+    <title>VCA</title>
+    <meta name="description" content="Web Components Test" />
+
+    <!-- Make sure IE renders with the latest engine -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Force mobile browser to the correct scale -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- We are web app capable -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <!-- Specify a plethra of icons -->
+    <link rel="shortcut icon" sizes="196x196" href="icon-196x196.png" />
+    <link rel="apple-touch-startup-image" href="icon-320x480.png" />
+    <link rel="apple-touch-icon-precomposed" href="icon-57x57.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="icon-76x76.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="icon-120x120.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="icon-152x152.png" />
+
+    <!-- Specify the Android theme colour -->
+    <meta name="theme-color" content="#cc0000" />
+
+    <!-- Styling for the index page -->
+    <link rel="stylesheet" href="components/normalize.css/normalize.css" />
+    <link rel="stylesheet" href="index.css" />
+
+    <!-- Web component polyfills -->
+    <script src="components/webcomponentsjs/webcomponents.js"></script>
+
+    <!-- Index specific functions -->
+    <script src="index.js"></script>
+
+    <!-- Bring in application web component -->
+    <link rel="import" href="components/test-app/test-app.html" />
+  </head>
+  <body>
+    <!-- Warn about disabled JavaScript -->
+    <noscript>Please <a href="http://enable-javascript.com/">enable JavaScript</a> to use the VCA user interface.</noscript>
+
+    <!-- This is the test application component -->
+    <test-app id="app"></test-app>
+
+    <!-- Warn for unsupported browsers -->
+    <div id="browserWarning">
+      <p><a href="http://browsehappy.com/">Please upgrade your web browser for the best experience.</a></p>
+      <ul>
+        <li>Internet Explorer 11+</li>
+        <li>Chrome 35+</li>
+        <li>Firefox 30+</li>
+        <li>Safari 8+</li>
+        <li>Opera 22+</li>
+      </ul>
+      <p><a href="http://whatbrowser.org/">What browser am I using?</a></p>
+      <p><button onclick="document.documentElement.className = document.documentElement.className.replace('browser-warning', '')">Let Me Continue Without Upgrading</button></p>
+    </div>
+  </body>
+</html>

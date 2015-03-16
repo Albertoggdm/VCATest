@@ -1,0 +1,5 @@
+/components/*
+!/components/test-app
+!/components/test-graph
+!/components/test-generator
+/node_modules

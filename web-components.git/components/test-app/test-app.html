@@ -1,0 +1,78 @@
+<!--
+Copyright (c) 2014 VCA Technology. All rights reserved.
+Use of this source code is governed by a BSD-style
+license that can be found in the LICENSE file.
+-->
+<!--
+We use the Polymer framework to provide the 'sugar' on top of the web components standard APIs
+
+  * Project homepage: https://www.polymer-project.org/
+  * API guide: https://www.polymer-project.org/docs/polymer/polymer.html
+-->
+<link rel="import" href="../polymer/polymer.html" />
+
+<!-- We need to import our other components -->
+<link rel="import" href="../test-graph/test-graph.html" />
+<link rel="import" href="../test-generator/test-generator.html" />
+
+<!--
+This is our single page test component. It allows us to perform MVC bindings.
+
+TODO:
+
+ * Improve the styling of the element
+ * Allow multiple generators
+ * Put the generators on one web page and the graph on another communicating
+   with web sockets through the node web server
+ * Store data between client sessions in local storage
+ * Add documentation to the component, attributes and functions
+-->
+<polymer-element name="test-app">
+  <!--
+  This template implements the shadow DOM of the component which has special properties
+  such as having scoped CSS styles and other goodies:
+
+    * http://www.html5rocks.com/en/tutorials/webcomponents/shadowdom/
+  -->
+  <template>
+    <!-- This style is 'scoped' to this shadow DOM so it doesn't leak out or into any other components -->
+    <style>
+      /* Apply a natural box layout model to all elements */
+      :host, :host *, :host *:before, :host *:after {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+
+      /* Some styling for this element when it is attached to the DOM.
+       * Any CSS that is good in evergreen browsers is fine: http://caniuse.com
+       */
+      :host {
+        display: block;
+        min-height: 100%;
+        background-color: green;
+      }
+    </style>
+    <!--
+      We can create components that we have imported above.
+      We implicitly bind the 'data' attribute between the two components
+    -->
+    <test-generator data="{{data}}"></test-generator>
+    <test-graph data="{{data}}"></test-graph>
+  </template>
+  <script>
+    (function(undefined) {
+      'use strict';
+      var polymer = new Polymer({
+        /* Polymer has various 'lifecycle' callbacks for each component. This one is invoked when the
+         * DOM is ready.
+         * https://www.polymer-project.org/docs/polymer/polymer.html#lifecyclemethods
+         */
+        ready: function() {
+          console.log('%cWelcome to the VCA Web Components Test!\n%cmay the source be with you',
+            'font-size:1.5em;color:#cc0000;', 'color:grey;font-size:1em;');
+        }
+      });
+    }());
+  </script>
+</polymer-element>

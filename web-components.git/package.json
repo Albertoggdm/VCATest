@@ -1,0 +1,15 @@
+{
+  "name": "vca-web-components-test",
+  "title": "VCA Web Components Test",
+  "description": "A test that assesses web component application development skills.",
+  "homepage": "http://www.vcatechnology.com/",
+  "repository": {
+    "type": "git",
+    "url": "git@dev.vcatechnology.com:tests/web-components.git"
+  },
+  "devDependencies": {
+    "bower": "*",
+    "connect": "*",
+    "serve-static": "*"
+  }
+}
